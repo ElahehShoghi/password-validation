@@ -7,12 +7,12 @@ import com.validator.exception.ValidationException
 class PasswordValidation {
 
     fun validate(password: String): Boolean {
-        if (password.length < 8 && password.count { it.isDigit() } < 2)
+        val digitCount = password.count { it.isDigit() }
+        if (password.length < 8 && digitCount < 2)
             throw ValidationException()
-        if (password.length < 8)
+        else if (password.length < 8)
             throw PasswordLengthException()
-        val digitCount = password.count() { it.isDigit() }
-        if (digitCount < 2)
+        else if (digitCount < 2)
             throw NumberLengthException()
         return true
     }
