@@ -1,56 +1,34 @@
 package com.validator
 
-import com.validator.exception.UppercaseCountValidationException
 import com.validator.exception.PasswordValidationException
-import org.junit.Test
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class PasswordValidationTest {
     private val passwordValidation = PasswordValidation()
 
-    @Test
-    fun shouldRaisePasswordLengthException_forPasswordsLessThan8Characters() {
+    companion object {
+        @JvmStatic
+        fun invalidPasswordArguments() = listOf(
+                Arguments.of("12Sdfgh", "Password must be at least 8 characters"),
+                Arguments.of("/1sSd&Wh", "The password must contain at least 2 numbers"),
+                Arguments.of("12sdfghj", "Password must contain at least one capital letter"),
+                Arguments.of("XX=-0", "Password must be at least 8 characters\nThe password must contain at least 2 numbers"),
+                Arguments.of("1234", "Password must be at least 8 characters\nPassword must contain at least one capital letter"),
+                Arguments.of("1abcdfgjosup/", "The password must contain at least 2 numbers\nPassword must contain at least one capital letter"),
+                Arguments.of("passwo2", "Password must be at least 8 characters\nThe password must contain at least 2 numbers\nPassword must contain at least one capital letter"),
+        )
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidPasswordArguments")
+    fun `should raise exception for invalid passwords`(password: String, exceptionMessage: String) {
         val exception = assertFailsWith<PasswordValidationException> {
-            passwordValidation.validate("1234")
+            passwordValidation.validate(password)
         }
-        assertEquals(
-            "Password must be at least 8 characters\nPassword must contain at least one capital letter",
-            exception.message
-        )
-    }
-
-    @Test
-    fun shouldRaiseNumberLengthException_forPasswordContainsLessThan2Numbers() {
-        val exception = assertFailsWith<PasswordValidationException> {
-            passwordValidation.validate("1abcdfgjosup/")
-        }
-        assertEquals(
-            "The password must contain at least 2 numbers\n" +
-                    "Password must contain at least one capital letter", exception.message
-        )
-    }
-
-    @Test
-    fun `should raise multiple error messages for multiple errors`() {
-        val exception = assertThrows<PasswordValidationException> {
-            passwordValidation.validate("passwo2")
-        }
-        assertEquals(
-            "Password must be at least 8 characters\nThe password must contain at least 2 numbers\nPassword must contain at least one capital letter",
-            exception.message
-        )
-    }
-
-    @Test
-    fun `should raise exception when there are not any capital letters`() {
-        val exception = assertThrows<UppercaseCountValidationException> {
-            passwordValidation.validate("12sdfghj")
-        }
-        assertEquals(
-            "Password must contain at least one capital letter",
-            exception.message
-        )
+        assertEquals(exceptionMessage, exception.message)
     }
 }

@@ -7,34 +7,26 @@ import com.validator.exception.UppercaseCountValidationException
 
 class PasswordValidation {
 
-    fun validate(password: String): Boolean {
-        val isLengthValid = password.length > 7
-        val isDigitCountValid = password.count { it.isDigit() } > 1
-        val isUppercaseCountValid = password.count { it.isUpperCase() } > 0
-        if (isLengthValid && isDigitCountValid && isUppercaseCountValid)
-            return true
-        throw exception(isLengthValid, isDigitCountValid, isUppercaseCountValid)
+    fun validate(password: String){
+        val isLengthNotValid = password.length < 8
+        val isDigitCountNotValid = password.count { it.isDigit() } < 2
+        val isUppercaseCountNotValid = password.count { it.isUpperCase() } < 1
+        if (isLengthNotValid || isDigitCountNotValid || isUppercaseCountNotValid)
+            throw customException(isLengthNotValid, isDigitCountNotValid, isUppercaseCountNotValid)
     }
 
-    private fun exception(
-        isLengthValid: Boolean,
-        isDigitCountValid: Boolean,
-        isUppercaseCountValid: Boolean
+    private fun customException(
+            isLengthNotValid: Boolean,
+            isDigitCountNotValid: Boolean,
+            isUppercaseCountNotValid: Boolean
     ): Exception {
-        if (!isLengthValid && !isDigitCountValid && !isUppercaseCountValid)
-            return PasswordValidationException(LengthValidationException(), DigitCountValidationException(), UppercaseCountValidationException())
-        else if (!isLengthValid && !isDigitCountValid)
-            return PasswordValidationException(LengthValidationException(), DigitCountValidationException())
-        else if (!isDigitCountValid && !isUppercaseCountValid)
-            return PasswordValidationException(DigitCountValidationException(), UppercaseCountValidationException())
-        else if (!isLengthValid && !isUppercaseCountValid)
-            return PasswordValidationException(LengthValidationException(), UppercaseCountValidationException())
-        else if (!isLengthValid)
-            return LengthValidationException()
-        else if (!isDigitCountValid)
-            return DigitCountValidationException()
-        else if (!isUppercaseCountValid)
-            return UppercaseCountValidationException()
-        return Exception()
+        val exceptions = mutableListOf<Exception>()
+        if (isLengthNotValid)
+            exceptions.add(LengthValidationException())
+        if (isDigitCountNotValid)
+            exceptions.add(DigitCountValidationException())
+        if (isUppercaseCountNotValid)
+            exceptions.add(UppercaseCountValidationException())
+        return PasswordValidationException(*exceptions.toTypedArray())
     }
 }
