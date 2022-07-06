@@ -1,4 +1,7 @@
-package com.tdd
+package com.validator
+
+import com.validator.exception.NumberLengthException
+import com.validator.exception.PasswordLengthException
 
 class PasswordValidation {
 
@@ -10,8 +13,4 @@ class PasswordValidation {
             throw NumberLengthException()
         return true
     }
-
-    class PasswordLengthException : Exception("Password must be at least 8 characters")
-
-    class NumberLengthException : Exception("The password must contain at least 2 numbers")
 }
