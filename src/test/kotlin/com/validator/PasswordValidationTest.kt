@@ -37,4 +37,15 @@ class PasswordValidationTest {
             exception.message
         )
     }
+
+    @Test
+    fun `should raise exception when there are not any capital letters`() {
+        val exception = assertThrows<CapitalLetterException> {
+            passwordValidation.validate("12sdfghj")
+        }
+        assertEquals(
+            "Password must contain at least one capital letter",
+            exception.message
+        )
+    }
 }
