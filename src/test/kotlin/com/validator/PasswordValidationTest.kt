@@ -1,7 +1,7 @@
 package com.validator
 
-import com.validator.exception.CapitalLetterException
-import com.validator.exception.ValidationException
+import com.validator.exception.UppercaseCountValidationException
+import com.validator.exception.PasswordValidationException
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
@@ -12,7 +12,7 @@ class PasswordValidationTest {
 
     @Test
     fun shouldRaisePasswordLengthException_forPasswordsLessThan8Characters() {
-        val exception = assertFailsWith<ValidationException> {
+        val exception = assertFailsWith<PasswordValidationException> {
             passwordValidation.validate("1234")
         }
         assertEquals(
@@ -23,7 +23,7 @@ class PasswordValidationTest {
 
     @Test
     fun shouldRaiseNumberLengthException_forPasswordContainsLessThan2Numbers() {
-        val exception = assertFailsWith<ValidationException> {
+        val exception = assertFailsWith<PasswordValidationException> {
             passwordValidation.validate("1abcdfgjosup/")
         }
         assertEquals(
@@ -34,7 +34,7 @@ class PasswordValidationTest {
 
     @Test
     fun `should raise multiple error messages for multiple errors`() {
-        val exception = assertThrows<ValidationException> {
+        val exception = assertThrows<PasswordValidationException> {
             passwordValidation.validate("passwo2")
         }
         assertEquals(
@@ -45,7 +45,7 @@ class PasswordValidationTest {
 
     @Test
     fun `should raise exception when there are not any capital letters`() {
-        val exception = assertThrows<CapitalLetterException> {
+        val exception = assertThrows<UppercaseCountValidationException> {
             passwordValidation.validate("12sdfghj")
         }
         assertEquals(

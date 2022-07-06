@@ -1,30 +1,40 @@
 package com.validator
 
-import com.validator.exception.CapitalLetterException
-import com.validator.exception.NumberLengthException
-import com.validator.exception.PasswordLengthException
-import com.validator.exception.ValidationException
+import com.validator.exception.DigitCountValidationException
+import com.validator.exception.LengthValidationException
+import com.validator.exception.PasswordValidationException
+import com.validator.exception.UppercaseCountValidationException
 
 class PasswordValidation {
 
     fun validate(password: String): Boolean {
-        val lengthFlag = password.length > 7
-        val digitCountFlag = password.count { it.isDigit() } > 1
-        val uppercaseCountFlag = password.count { it.isUpperCase() } > 0
-        if (!lengthFlag && !digitCountFlag && !uppercaseCountFlag)
-            throw ValidationException(PasswordLengthException(), NumberLengthException(), CapitalLetterException())
-        else if (!lengthFlag && !digitCountFlag)
-            throw ValidationException(PasswordLengthException(), NumberLengthException())
-        else if (!digitCountFlag && !uppercaseCountFlag)
-            throw ValidationException(NumberLengthException(), CapitalLetterException())
-        else if (!lengthFlag && !uppercaseCountFlag)
-            throw ValidationException(PasswordLengthException(), CapitalLetterException())
-        else if (!lengthFlag)
-            throw PasswordLengthException()
-        else if (!digitCountFlag)
-            throw NumberLengthException()
-        else if (!uppercaseCountFlag)
-            throw CapitalLetterException()
-        return true
+        val isLengthValid = password.length > 7
+        val isDigitCountValid = password.count { it.isDigit() } > 1
+        val isUppercaseCountValid = password.count { it.isUpperCase() } > 0
+        if (isLengthValid && isDigitCountValid && isUppercaseCountValid)
+            return true
+        throw exception(isLengthValid, isDigitCountValid, isUppercaseCountValid)
+    }
+
+    private fun exception(
+        isLengthValid: Boolean,
+        isDigitCountValid: Boolean,
+        isUppercaseCountValid: Boolean
+    ): Exception {
+        if (!isLengthValid && !isDigitCountValid && !isUppercaseCountValid)
+            return PasswordValidationException(LengthValidationException(), DigitCountValidationException(), UppercaseCountValidationException())
+        else if (!isLengthValid && !isDigitCountValid)
+            return PasswordValidationException(LengthValidationException(), DigitCountValidationException())
+        else if (!isDigitCountValid && !isUppercaseCountValid)
+            return PasswordValidationException(DigitCountValidationException(), UppercaseCountValidationException())
+        else if (!isLengthValid && !isUppercaseCountValid)
+            return PasswordValidationException(LengthValidationException(), UppercaseCountValidationException())
+        else if (!isLengthValid)
+            return LengthValidationException()
+        else if (!isDigitCountValid)
+            return DigitCountValidationException()
+        else if (!isUppercaseCountValid)
+            return UppercaseCountValidationException()
+        return Exception()
     }
 }
