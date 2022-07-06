@@ -2,6 +2,7 @@ package com.validator
 
 import com.validator.exception.NumberLengthException
 import com.validator.exception.PasswordLengthException
+import com.validator.exception.ValidationException
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
@@ -32,7 +33,7 @@ class PasswordValidationTest {
             passwordValidation.validate("passwo2")
         }
         assertEquals(
-            "Password must be at least 8 characters\\nThe password must contain at least 2 numbers",
+            "Password must be at least 8 characters\nThe password must contain at least 2 numbers",
             exception.message
         )
     }
