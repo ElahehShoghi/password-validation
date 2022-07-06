@@ -1,5 +1,6 @@
 package com.validator
 
+import com.validator.exception.CapitalLetterException
 import com.validator.exception.NumberLengthException
 import com.validator.exception.PasswordLengthException
 import com.validator.exception.ValidationException
@@ -14,6 +15,8 @@ class PasswordValidation {
             throw PasswordLengthException()
         else if (digitCount < 2)
             throw NumberLengthException()
+        else if (password.count { it.isUpperCase() } < 1)
+            throw CapitalLetterException()
         return true
     }
 }

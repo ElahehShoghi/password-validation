@@ -1,5 +1,6 @@
 package com.validator
 
+import com.validator.exception.CapitalLetterException
 import com.validator.exception.NumberLengthException
 import com.validator.exception.PasswordLengthException
 import com.validator.exception.ValidationException
