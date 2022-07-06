@@ -1,8 +1,6 @@
 package com.validator
 
 import com.validator.exception.CapitalLetterException
-import com.validator.exception.NumberLengthException
-import com.validator.exception.PasswordLengthException
 import com.validator.exception.ValidationException
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
@@ -14,18 +12,24 @@ class PasswordValidationTest {
 
     @Test
     fun shouldRaisePasswordLengthException_forPasswordsLessThan8Characters() {
-        val exception = assertFailsWith<PasswordLengthException> {
+        val exception = assertFailsWith<ValidationException> {
             passwordValidation.validate("1234")
         }
-        assertEquals("Password must be at least 8 characters", exception.message)
+        assertEquals(
+            "Password must be at least 8 characters\nPassword must contain at least one capital letter",
+            exception.message
+        )
     }
 
     @Test
     fun shouldRaiseNumberLengthException_forPasswordContainsLessThan2Numbers() {
-        val exception = assertFailsWith<NumberLengthException> {
+        val exception = assertFailsWith<ValidationException> {
             passwordValidation.validate("1abcdfgjosup/")
         }
-        assertEquals("The password must contain at least 2 numbers", exception.message)
+        assertEquals(
+            "The password must contain at least 2 numbers\n" +
+                    "Password must contain at least one capital letter", exception.message
+        )
     }
 
     @Test
@@ -34,7 +38,7 @@ class PasswordValidationTest {
             passwordValidation.validate("passwo2")
         }
         assertEquals(
-            "Password must be at least 8 characters\nThe password must contain at least 2 numbers",
+            "Password must be at least 8 characters\nThe password must contain at least 2 numbers\nPassword must contain at least one capital letter",
             exception.message
         )
     }
