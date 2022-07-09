@@ -13,13 +13,13 @@ class PasswordValidationTest {
     companion object {
         @JvmStatic
         fun invalidPasswordArguments() = listOf(
-                Arguments.of("12Sdfgh", "Password must be at least 8 characters"),
+                Arguments.of("12Sdfgh", "Password must be at least 8 characters\npassword must contain at least one special character"),
                 Arguments.of("/1sSd&Wh", "The password must contain at least 2 numbers"),
-                Arguments.of("12sdfghj", "Password must contain at least one capital letter"),
+                Arguments.of("12sdfghj", "Password must contain at least one capital letter\npassword must contain at least one special character"),
                 Arguments.of("XX=-0", "Password must be at least 8 characters\nThe password must contain at least 2 numbers"),
-                Arguments.of("1234", "Password must be at least 8 characters\nPassword must contain at least one capital letter"),
+                Arguments.of("1234", "Password must be at least 8 characters\nPassword must contain at least one capital letter\npassword must contain at least one special character"),
                 Arguments.of("1abcdfgjosup/", "The password must contain at least 2 numbers\nPassword must contain at least one capital letter"),
-                Arguments.of("passwo2", "Password must be at least 8 characters\nThe password must contain at least 2 numbers\nPassword must contain at least one capital letter"),
+                Arguments.of("passwo2", "Password must be at least 8 characters\nThe password must contain at least 2 numbers\nPassword must contain at least one capital letter\npassword must contain at least one special character"),
         )
     }
 
